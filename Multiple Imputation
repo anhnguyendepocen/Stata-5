@@ -1,0 +1,29 @@
+% Reshape Data
+
+mi set flong % Reshape the data - "flong" is needed for multiple imputation with multilevel modelling
+
+% Register Imputations
+
+mi register regular x1 x2 x3 x4 x5 x6 x7 x10 x12 % Register variables that do NOT need imputation
+mi register imputed x8 x9 x11 x13 /// 
+x14 x15 x16 x17 % Register variables that have missing data and require imputation
+
+
+mi describe % Provide summary statistics on those regular and imputed variables
+
+% 1st Imputation - Add one varibale to be imputed
+% Following Imputations - Add additional variables
+
+% mi impute [variables to be imputed] = dependent variable [variables that do NOT need to be imputed]
+
+mi impute chained (logit, augment) x8 x9 x11 x13 /// % "logit" is used because these variables to be imputed are binary
+(ologit, augment) x14 x15 /// % "ologit" is used as these variables are ordinal 
+x16 x17 (ologit, augment ascontinuous) /// % If imputation fails, add "ascontinuous" to treat the categorical variable as continuous
+ = y x1 x2 x3  /// & "=" is used to signal the end of the imputed variables, and move onto the regular variables
+x4 x5 x6 x7 x10 x12, add(5) rseed(2233) by(country, noreport) dots % "add(5) refers to computing 5 imputations
+                                                                   % "by(country,)" refers to compute imputations for each country
+                                                                   % "(noreport)" refers to do NOT report all the imputation log
+                                                                   % "dots" refers to showing dots for each imputation completed for each
+                                                                   %  country
+                                                                   % E.g. of dots --> ".." refers to 2 out of the 5 imputations complete
+
