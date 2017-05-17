@@ -1,0 +1,32 @@
+% General Three-way table
+
+tab3way smoking sex race1, rowp % rowp is used to denote ROW PERCENTAGES
+
+% Three-way table when used with a subset of the data
+          
+         % Generate new sample/subset
+         
+         gen sample1=1 
+         replace sample1=0 if \\\
+         sex==.|race1==.|age==.|educ==.|everM==.|everC==.|everP==.|family==.|bmi==.
+         
+              % Three-way table
+              
+              tab3way smoking sex race1 if sample1==1, rowp
+              
+              
+% Three-way table with frequencies
+
+table y x2 x3, contents(freq)
+
+% Three-way tables with frequency weights, column totals and row percentages
+
+tab3way y x2 x3 [fw=count], coltot rowp
+
+% Three-way tables with row totals
+
+tab3way y x2 x3 [fw=count], rowtot
+
+% Three-way tables that include separate column of missing values ("usemiss")
+
+tab3way y x2 x3, rowp coltot usemiss
