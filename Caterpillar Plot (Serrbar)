@@ -26,4 +26,4 @@ label values country country1 % Attach labels
 serrbar u0 u0se country if pickone==1, scale(1.96) yline(0) ytitle("Predicted Random \\\
 Intercept") xtitle("Country") xlabel(1 (1) 27, valuelabel labsize(2) angle(vertical) g)
 
-qui graph export fig3.png, replace width(300) % Save and explort the graph
+qui graph export fig3.png, replace width(300) % Save and export the graph
