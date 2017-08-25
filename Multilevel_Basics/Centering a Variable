@@ -1,7 +1,7 @@
 % Centering a variable
-% Mean is approx. 0
+% Mean is approx. = 0
 
-rename oldvar newvar % rename the oldvar into newvar
+rename oldvar newvar           % rename the oldvar into newvar
 su newvar
-return list % returns the mean
+return list                    % returns the mean
 gen cen_newvar= newvar-r(mean) % generate new variable
