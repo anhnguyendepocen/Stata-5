@@ -1,29 +1,50 @@
-%Prediction
-  predict u0, reffects % unbiased linear predictions of random effects (also generates the GRAND MEAN of the dependent var)
-  predict u0se, reses % predict standard errors of random effect
-  sort u0 % sort the predictions
-  gen country=sum(pickone) % instead of picking every observation in each country, just randomly pick one observation per country
-  gsort -pickone -country % Sort the countries according to ascending order i.e. -2SD to Mean to +2SD
-  list cntry u0 u0se country if pickone==1
-  capture drop u0 u0se country pickone
+/***************
+   PREDICTION
+***************/  
+
+predict u0, reffects              // unbiased linear predictions of random effects (also generates the GRAND MEAN of the dependent var)
+predict u0se, reses               // predict standard errors of random effect
+sort u0                           // sort the predictions
+gen country=sum(pickone)          // instead of picking every observation in each country, just randomly pick one observation per country
+gsort -pickone -country           // Sort the countries according to ascending order i.e. -2SD to Mean to +2SD
+
+list cntry u0 u0se country if pickone==1  // List the countries by random selecting one observation per country (e.g. pickone)
+capture drop u0 u0se country pickone
 
 
-% Rankings by Country
+/*******************
+ RANK THE COUNTRIES
+*******************/
+
+* Tabulate the country variable
+
 tab cntry
 
-% Label the countries by their ranking
-% Produce a horizontal bar plot, with the country names attached to the x-axis
+* Label the countries by their ranking
+* Produce a horizontal bar plot, with the country names attached to the x-axis
 
-label define country1 1 "Ukraine" 2 "Bulgaria" 3 "Georgia" 4 "Russia" 5 "Lithuania" 6 "Czech
-Republic" 7 "Hungary" 8 "Slovakia" 9 "Portugal" 10 "Croatia" 11 "Ireland" 12 "Estonia" 13
-"France" 14 "Cyprus" 15 "Poland" 16 "Germany" 17 "Great Britain" 18 "Slovenia" 19 "Israel" 20
-"Spain" 21 "Belgium" 22 "Netherlands" 23 "Switzerland" 24 "Sweden" 25 "Norway" 26 "Denmark"
-27 "Finland"
+label define country1 1 "Ukraine" 2 "Bulgaria" 3 "Georgia" 4 "Russia" 5 "Lithuania"                    ///
+                      6 "Czech Republic" 7 "Hungary" 8 "Slovakia" 9 "Portugal"                         ///
+                      10 "Croatia" 11 "Ireland" 12 "Estonia" 13 "France" 14 "Cyprus"                   ///
+                      15 "Poland" 16 "Germany" 17 "Great Britain" 18 "Slovenia"                        ///
+                      19 "Israel" 20 "Spain" 21 "Belgium" 22 "Netherlands" 23 "Switzerland"            ///
+                      24 "Sweden" 25 "Norway" 26 "Denmark" 27 "Finland"                                ///
 
-label values country country1 % Attach labels
+* Attach label "country1" to the variale COUNTRY
 
-% Caterpillar plot
+label values country country1 
+
+
+
+/******************************
+   CREATE A CATERPILLAR PLOT
+******************************/
+
+* Visualise the ranking
+
 serrbar u0 u0se country if pickone==1, scale(1.96) yline(0) ytitle("Predicted Random \\\
 Intercept") xtitle("Country") xlabel(1 (1) 27, valuelabel labsize(2) angle(vertical) g)
+
+* Save the graph
 
 qui graph export fig3.png, replace width(300) % Save and export the graph
