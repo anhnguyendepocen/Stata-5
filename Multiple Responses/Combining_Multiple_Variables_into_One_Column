@@ -1,0 +1,17 @@
+/**********************************************
+   Combining Multiple Columns into One Column
+**********************************************/
+
+* How? --> RESHAPE THE DATA FROM WIDE TO LONG
+
+** Each political activity is represented by a single variable
+*** Mapping the columns of the data matrix (variables h_polit_act_*) into one column.
+
+
+reshape long h_polit_act_, i(id) string      // Reshape the data to "long"
+		
+drop if h_polit_act_ == 0 				   	       // Drop if NOTHING was chosen (i.e. == 0)
+
+drop h_polit_act_					   	               // Drop individual variables for each response category
+
+rename _j h_polit_act			          	       // Rename the main variable
