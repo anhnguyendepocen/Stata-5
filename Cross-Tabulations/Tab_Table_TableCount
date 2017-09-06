@@ -1,0 +1,50 @@
+/*******************
+ SIMPLE TABULATIONS
+*******************/
+
+tab race married
+tab race married, chi2          // Report Chi-squared value
+tab race married, chi2 expected // Expected frequencies under null hypothesis
+tab race married, chi2 cchi2    // Chi-squared within each cell
+tab race married, exact         // Report Fisher's Exact Test: Used when we have sparse responses/small sample size (i.e. LOW CELL COUNT)
+
+
+/******************
+   USING TABLE
+******************/
+
+table union, by(collgrad)                             // Same as using "tab union collgrad"
+
+table union race, by(collgrad)                        // 3-way table
+
+table union race married, by(collgrad)                // 4-way table
+table union race married, contents(freq) by(collgrad) // freq. is default
+
+
+** Define the contents of the table i.e. what we want to display
+
+table union race married, contents(mean south) by(collgrad) // Proportion of women who live in the south by each of these categories
+
+table union race married, contents(mean age) by(collgrad)   // Mean age of people in each of these groups
+
+
+/******************
+   USING TAB3WAY
+******************/
+
+* 1 = LHS, 2 = Bottom RHS, 3 = Top RHS
+
+tab3way union race married, freq
+tab3way union race married, freq rowpct
+
+
+/***************************
+ REPORTING NULL FREQUENCIES
+***************************/
+
+* Allowing us to show those categories in cross-tabulations with NO observations = TABCOUNT
+
+ssc install tabcount
+
+tabcount race, v(1 2) zero // v(1 2) = We have two categories
+                           // zero   = Include categories with NULL frequencies
